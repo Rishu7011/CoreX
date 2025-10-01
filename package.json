@@ -1,0 +1,5 @@
+{
+  "name": "corex-monorepo",
+  "private": true,
+  "workspaces": ["backend", "frontend"]
+}
