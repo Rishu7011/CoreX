@@ -12,7 +12,7 @@ const getOpenAIResponse = async(message)=>{
             messages: [
                 {
                     role: 'user',
-                    content: req.body.message,
+                    content: message,
                 },
             ],
         })
