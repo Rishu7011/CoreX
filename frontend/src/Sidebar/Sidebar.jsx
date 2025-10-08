@@ -3,7 +3,12 @@ function Sidebar() {
     return ( 
         <>
         <div>
-            hello ji mai aagaya
+           {/* new chat Button */}
+           
+
+           {/* history */}
+
+           {/* Signin */}
         </div>
         </>
      );

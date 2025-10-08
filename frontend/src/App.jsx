@@ -1,7 +1,7 @@
 import './App.css'
 import Sidebar from "./Sidebar/Sidebar.jsx"
 import ChatWindow from "./ChatWindow/ChatWindow.jsx"
-// import MyContext from "./MyContext.jsx"
+import {MyContext} from "../src/MyContext.jsx"
 
 
 function App() {
@@ -10,8 +10,10 @@ function App() {
   return (
     <div className='app'>
       
-      <Sidebar></Sidebar>
-      <ChatWindow></ChatWindow>
+      <MyContext.Provider value={providerValues}>
+        <Sidebar></Sidebar>
+        <ChatWindow></ChatWindow>
+      </MyContext.Provider>
      
     </div>
   )
