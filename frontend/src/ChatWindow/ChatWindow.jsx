@@ -1,11 +1,11 @@
 import "./ChatWindow.css"
 import Chat from "../Chat/Chat.jsx"
 import { MyContext } from "../MyContext.jsx";
-import { useContext, useState } from "react";
-import {ScaleLoader} from 'react-spinners';
+import { useContext, useEffect, useState } from "react";
+import { ScaleLoader } from 'react-spinners';
 
 function ChatWindow() {
-    const { prompt, setPrompt, reply, setReply, currentThreadId, setCurrentThreadId } = useContext(MyContext);
+    const { prompt, setPrompt, reply, setReply, currentThreadId, setCurrentThreadId, prevChats, setPrevChats } = useContext(MyContext);
     const [loading, setLoading] = useState(false);
     const getReply = async () => {
         const options = {
@@ -21,8 +21,8 @@ function ChatWindow() {
         }
         try {
             setLoading(true);
-            const response =await fetch("http://localhost:8080/api/chat", options)
-            const res = await response.json(); 
+            const response = await fetch("http://localhost:8080/api/chat", options)
+            const res = await response.json();
             setReply(res.reply);
             console.log("Received reply:", res.reply);
             setLoading(false);
@@ -30,6 +30,20 @@ function ChatWindow() {
             console.error("Error fetching reply:", error);
         }
     }
+    //Append the new message and reply to the chat history
+    useEffect(() => {
+        if (prompt && reply) {
+            setPrevChats((prevChats) => [...prevChats, {
+                role: "user",
+                content: prompt
+            },
+            {
+                role: "assistant",
+                content: reply
+            }])
+        }
+        setPrompt("");
+    }, [reply])
     return (
         <>
             <div className="chatWindow">
@@ -45,7 +59,7 @@ function ChatWindow() {
                             value={prompt}
                             onChange={(e) => setPrompt(e.target.value)}
                             onKeyDown={(e) => {
-                                if (prompt===""){
+                                if (prompt === "") {
                                     return;
                                 }
                                 if (e.key === "Enter") {
