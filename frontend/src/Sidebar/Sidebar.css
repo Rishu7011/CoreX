@@ -9,7 +9,7 @@
 
 }
 
-button{
+button {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -17,9 +17,10 @@ button{
     padding: 10px;
     border-radius: 14px;
     background-color: transparent;
-    border:solid rgba(255, 255, 255, 0.5);
+    border: solid rgba(255, 255, 255, 0.5);
 }
-.logo{
+
+.logo {
     height: 25px;
     width: 25px;
     background-color: white;
@@ -27,32 +28,78 @@ button{
     object-fit: cover;
 }
 
-button span{
+button span {
     font-size: 20px;
 }
 
-.history{
+.history {
     margin: 10px;
-    padding: 10px;
-    height: 100%;
-
+    padding: 0;
+    height: 90%;
+    overflow-y: scroll;
 }
 
-.history li{
+.history::-webkit-scrollbar {
+    background-color: #888;
+    /* color of the thumb */
+    border-radius: 10px;
+    /* rounded corners */
+    
+    /* optional space around thumb */
+    background-clip: padding-box;
+}
+
+/* On hover */
+.history::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+
+/* Scrollbar corner (if both horizontal & vertical scrollbars show) */
+.history::-webkit-scrollbar-corner {
+  background: transparent;
+  border: 0.5px solid transparent;
+}
+
+.history li {
     list-style-type: none;
+    margin: 0px 0px 6px 6px;
+    padding: 6px 10px;
     cursor: pointer;
-    padding: 2px 5px;
-    margin-bottom: 0.3rem;
     font-size: 14px;
-    border:solid 10px transparent;
+    border: solid 0px transparent;
     position: relative;
+    display: flex;
+    justify-content: space-between;
 }
-.history li:hover{
+
+.history li p {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 80%;
+}
+
+.history li i {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888;
+    cursor: pointer;
+}
+
+.history li i:hover {
+    color: #fff;
+}
+
+.history li:hover {
     background-color: rgba(255, 255, 255, 0.1);
     border-radius: 14px;
 }
 
-.created-by{
+.created-by {
     font-size: 12px;
     padding: 10px;
     color: #555;
