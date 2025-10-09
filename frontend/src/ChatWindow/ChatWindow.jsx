@@ -54,7 +54,7 @@ function ChatWindow() {
         <>
             <div className="chatWindow">
                 <div className="navbar">
-                    <span >BYTEBUDDY  <i className="fa-solid fa-chevron-down"></i></span>
+                    <span >CoreX  <i className="fa-solid fa-chevron-down"></i></span>
                     <div className="userIconDiv"><span >{
                         loggedIn ? <i className="userIcon fa-solid fa-circle-user"></i> : <p><Link style={{ textDecoration: "none", color: "#0D0D0D" }} to="/login">Login</Link></p>
                     }</span></div>
@@ -78,7 +78,7 @@ function ChatWindow() {
                         <div id="submit" onClick={getReply}><i className="fa-solid fa-paper-plane"></i></div>
                     </div>
                     <p className="info">
-                        BYTEBUDDY can make mistakes. check important info. See cookie Preferences.
+                        CoreX can make mistakes. check important info. See cookie Preferences.
                     </p>
                 </div>
             </div>
