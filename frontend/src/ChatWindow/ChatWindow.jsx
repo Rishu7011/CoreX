@@ -5,12 +5,21 @@ import { useContext, useEffect, useState } from "react";
 import { ScaleLoader } from 'react-spinners';
 import { Link } from "react-router-dom";
 import Login from "../LogIn/Login.jsx";
+import { auth, googleProvider, } from "../firebase.js";
+import { signOut } from "firebase/auth";
 
 
 function ChatWindow() {
-    const { prompt, setPrompt, reply, setReply, currentThreadId, setCurrentThreadId, prevChats, setPrevChats ,setNewChat} = useContext(MyContext);
+    const { prompt, setPrompt, reply, setReply, currentThreadId, setCurrentThreadId, prevChats, setPrevChats, setNewChat, loggedIn, setLoggedIn, user } = useContext(MyContext);
     const [loading, setLoading] = useState(false);
-    const [loggedIn, setLoggedIn] = useState(false);
+    const handleSignOut = () => {
+        signOut(auth).then(() => {
+            setUser(null);
+            setLoggedIn(false);
+        }).catch((error) => {
+            console.error("Sign Out Error:", error);
+        });
+    }
     const getReply = async () => {
         const options = {
             method: "POST",
@@ -55,9 +64,25 @@ function ChatWindow() {
             <div className="chatWindow">
                 <div className="navbar">
                     <span >CoreX  <i className="fa-solid fa-chevron-down"></i></span>
-                    <div className="userIconDiv"><span >{
-                        loggedIn ? <i className="userIcon fa-solid fa-circle-user"></i> : <p><Link style={{ textDecoration: "none", color: "#0D0D0D" }} to="/login">Login</Link></p>
-                    }</span></div>
+                    <div className="userIconDiv"><span >{loggedIn ? (
+                        <img
+                            src={user?.avatar || user?.photoURL}
+                            alt="user avatar"
+                            className="userAvatar"
+                            style={{ width: "35px", height: "35px", borderRadius: "50%" }}
+                        />
+                    ) : (
+                        <p>
+                            <Link
+                                style={{ textDecoration: "none", color: "#0D0D0D" }}
+                                to="/login"
+                            >
+                                Login
+                            </Link>
+                        </p>
+                    )}
+                    </span></div>
+                    <div onClick={handleSignOut}>logout</div>
                 </div>
                 <Chat></Chat>
                 {loading && <div className="loaderDiv"><ScaleLoader color="#fff"></ScaleLoader></div>}

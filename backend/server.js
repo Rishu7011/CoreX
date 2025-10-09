@@ -3,6 +3,7 @@ import "dotenv/config";
 import cors from "cors";
 import mongoose from "mongoose";
 import chatRoutes from "./routes/chat.js"
+import AuthRoutes from "./routes/Auth.js";
 
 const app = express();
 const PORT = 8080;
@@ -11,6 +12,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api",chatRoutes)
+app.use("/api",AuthRoutes)
 
 
 app.listen(PORT, () => {

@@ -1,0 +1,51 @@
+import mongoose from "mongoose";
+// Define User Schema
+const userSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+      minlength: 2,
+      maxlength: 50,
+    },
+    accessToken: {
+        type: String,
+        required: true,
+        unique: true,
+        trim: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
+      match: [/^\S+@\S+\.\S+$/, "Please use a valid email address"],
+    },
+    // password: {
+    //   type: String,
+    //   required: true,
+    //   minlength: 6,
+    //   select: false, // won't be returned by default when querying
+    // },
+    avatar: {
+      type: String, // URL to profile picture
+      default: "",
+    },
+    provider: {
+      type: String,
+      enum: ["google", "github"],
+      default: "local",
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
+  },
+  { timestamps: true }
+);
+
+
+const User = mongoose.model("User", userSchema);
+export default User;
