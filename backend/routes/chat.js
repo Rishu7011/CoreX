@@ -1,96 +1,131 @@
 import express from "express";
 import Thread from "../models/Thread.js";
 import getOpenAIResponse from "../utils/openai.js"
+import tempThread from "../models/temp.js";
+import User from "../models/user.js";
 
 const router = express.Router();
 
 //test
-router.post("/test",async(req,res)=>{
-    try{
+router.post("/test", async (req, res) => {
+    try {
         const thread = new Thread({
-            threadId:"abc",
-            title:"testing new thread"
+            threadId: "abc",
+            title: "testing new thread"
         })
         const response = await thread.save();
         res.send(response);
-    }catch(err){
+    } catch (err) {
         console.log(err);
-        res.status(500).json({error:"Failed to save in Db"});
+        res.status(500).json({ error: "Failed to save in Db" });
     }
 })
 
 //Get all threads
-router.get("/thread",async(req,res)=>{
-    try{
+router.get("/thread", async (req, res) => {
+    try {
         const threads = await Thread.find({}).sort({ updatedAt: -1 });
         //descending order of updated... most recent data on top
         res.json(threads);
 
-        
-    }catch(err){
+
+    } catch (err) {
         console.log(err);
-        res.status(500).json({error:"Failes to fetch threads"})
+        res.status(500).json({ error: "Failes to fetch threads" })
     }
 })
 
 //get a particular thread
-router.get("/thread/:threadId",async(req,res)=>{
-    const {threadId} = req.params;
-    try{
-        const thread=await Thread.findOne({threadId});
-        if(!thread){
-            res.status(404).json({error:"thread not found"})
+router.get("/thread/:threadId", async (req, res) => {
+    const { threadId } = req.params;
+    try {
+        const thread = await Thread.findOne({ threadId });
+        if (!thread) {
+            res.status(404).json({ error: "thread not found" })
         }
         res.json(thread.messages)
-    }catch(err){
+    } catch (err) {
         console.log(err);
-        res.status(500).json({error:"Failes to fetch chat"})
+        res.status(500).json({ error: "Failes to fetch chat" })
     }
 })
 
-router.delete("/thread/:threadId",async(req,res)=>{
-    const {threadId}=req.params;
-    try{
-        const deleteThread = await Thread.findOneAndDelete({threadId});
-        if(!deleteThread){
-            res.status(404).json({error:"Thread not found"})
+router.delete("/thread/:threadId", async (req, res) => {
+    const { threadId } = req.params;
+    try {
+        const deleteThread = await Thread.findOneAndDelete({ threadId });
+        if (!deleteThread) {
+            res.status(404).json({ error: "Thread not found" })
         }
-        res.status(200).json({success:"thread successfully deleted"})
-    }catch(err){
+        res.status(200).json({ success: "thread successfully deleted" })
+    } catch (err) {
         console.log(err);
-        res.status(500).json({error:"Failes to delete threads"})
+        res.status(500).json({ error: "Failes to delete threads" })
     }
 })
-
-router.post("/chat",async(req,res)=>{
-    const {threadId,message}=req.body;
-    console.log("Received message:", message, "in thread:", threadId)
-    if(!threadId||!message){
-        res.status(400).json({error:"missing required fields"})
+router.delete("/api/cleanup/:threadId", async (req, res) => {
+    try {
+        const { threadId } = req.params;
+        // Delete or cleanup logic
+        await tempThread.findOneAndDelete({ threadId });
+        res.sendStatus(200);
+    } catch (err) {
+        console.error("Cleanup error:", err);
+        res.sendStatus(500);
     }
+});
+
+router.post("/chat", async (req, res) => {
+    const { threadId, message, token } = req.body;
     
-    try{
-        let thread = await Thread.findOne({threadId});
+    if (!threadId || !message) {
+        res.status(400).json({ error: "missing required fields" })
+    }
+
+
+    try {
+        if (!token || token.trim() === "") {
+            let thread = await tempThread.findOne({ threadId });
+            if (!thread) {
+                thread = new tempThread({
+                    threadId,
+                    title: message,
+                    messages: [{ role: "user", content: message }]
+                });
+            }else{
+                thread.messages.push({ role: "user", content: message });
+            }
+            const assistantReply = await getOpenAIResponse(message);
+            thread.messages.push({ role: "assistant", content: assistantReply });
+            thread.updatedAt = new Date();
+            await thread.save();
+            return res.json({ reply: assistantReply });
+        }
+        let thread = await Thread.findOne({ threadId });
+        console.log("token:", token);
+        let userId = await User.findOne({ accessToken: token })
         
-        if(!thread){
+
+        if (!thread) {
             //create a new thread in DB
-            
+
             thread = new Thread({
                 threadId,
-                title:message,
-                messages:[{role:"user",content:message}]
+                title: message,
+                messages: [{ role: "user", content: message }],
+                userId: userId ? userId : undefined
             })
-        }else{
-                thread.messages.push({role:"user",content:message})
-            }
-            const assistantReply =await  getOpenAIResponse(message);
-            thread.messages.push({role:"assistant",content:assistantReply})
-            thread.updatedAt =new Date();
-            await thread.save();
-            res.json({reply:assistantReply});
-    }catch(error){
-        console.log(err)
-        res.status(500).json({error:"Something went wrong"})
+        } else {
+            thread.messages.push({ role: "user", content: message })
+        }
+        const assistantReply = await getOpenAIResponse(message);
+        thread.messages.push({ role: "assistant", content: assistantReply })
+        thread.updatedAt = new Date();
+        await thread.save();
+        res.json({ reply: assistantReply });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: "Something went wrong" })
     }
 })
 

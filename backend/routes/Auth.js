@@ -5,8 +5,7 @@ const router = express.Router();
 
 router.post("/signup", async (req, res) => {
   try {
-    console.log("Signup Request Body:", req.body);
-    const { name, email, accessToken, avatar, provider } = req.body;
+    const { name, email, accessToken, avatar, provider, userId } = req.body;
 
     const userExists = await User.findOne({ email });
     if (userExists) {
@@ -17,7 +16,7 @@ router.post("/signup", async (req, res) => {
       });
     }
 
-    const user = await User.create({ name, email, accessToken, avatar, provider });
+    const user = await User.create({ name, email, accessToken, avatar, provider, userId });
     res.status(201).json({
       message: "User registered successfully",
       accessToken: user.accessToken,

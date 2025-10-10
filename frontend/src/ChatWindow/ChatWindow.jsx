@@ -14,12 +14,34 @@ function ChatWindow() {
     const [loading, setLoading] = useState(false);
     const handleSignOut = () => {
         signOut(auth).then(() => {
-            setUser(null);
             setLoggedIn(false);
+            cookieStore.delete('token');
         }).catch((error) => {
             console.error("Sign Out Error:", error);
         });
     }
+    const getCookie = (name) => {
+        const match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
+        return match ? match[2] : null;
+    };
+    useEffect(() => {
+        const token = getCookie("token");
+        if (token) {
+            return;
+        } else {
+            const handleUnload = async (threadId) => {
+                await fetch(`http://localhost:5000/api/cleanup/${threadId}`, {
+                    method: "DELETE"
+                });
+            };
+            window.addEventListener("beforeunload", handleUnload);
+
+            return () => {
+                window.removeEventListener("beforeunload", handleUnload);
+            };
+        }
+    }, []);
+    
     const getReply = async () => {
         const options = {
             method: "POST",
@@ -29,6 +51,7 @@ function ChatWindow() {
             body: JSON.stringify({
                 message: prompt,
                 threadId: currentThreadId,
+                token: getCookie("token")||"",
             })
 
         }
@@ -45,6 +68,7 @@ function ChatWindow() {
             setLoading(false);
         }
     }
+    
     //Append the new message and reply to the chat history
     useEffect(() => {
         if (prompt && reply) {
@@ -59,18 +83,22 @@ function ChatWindow() {
         }
         setPrompt("");
     }, [reply])
+
     return (
         <>
             <div className="chatWindow">
                 <div className="navbar">
                     <span >CoreX  <i className="fa-solid fa-chevron-down"></i></span>
                     <div className="userIconDiv"><span >{loggedIn ? (
-                        <img
-                            src={user?.avatar || user?.photoURL}
-                            alt="user avatar"
-                            className="userAvatar"
-                            style={{ width: "35px", height: "35px", borderRadius: "50%" }}
-                        />
+                        <span>
+                            <img
+                                src={user?.avatar || user?.photoURL}
+                                alt="user avatar"
+                                className="userAvatar"
+                                style={{ width: "35px", height: "35px", borderRadius: "50%" }}
+                            />
+                            <div onClick={handleSignOut}>logout</div>
+                        </span>
                     ) : (
                         <p>
                             <Link
@@ -82,7 +110,7 @@ function ChatWindow() {
                         </p>
                     )}
                     </span></div>
-                    <div onClick={handleSignOut}>logout</div>
+                    
                 </div>
                 <Chat></Chat>
                 {loading && <div className="loaderDiv"><ScaleLoader color="#fff"></ScaleLoader></div>}

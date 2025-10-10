@@ -14,7 +14,7 @@ const Login = () => {
       const token = await result.user.getIdToken(); // ✅ get Firebase ID token
 
 
-      console.log("✅ User Info:", result.user);
+      console.log("✅ User Info:", result);
       const userData = {
         method: "POST",
         headers: {
@@ -26,14 +26,14 @@ const Login = () => {
           accessToken: token,  // use token here
           avatar: result.user.photoURL,
           provider: "google",
+          userId: result.user.uid,
         })
       };
       const response = await fetch("http://localhost:8080/api/signup", userData);
 
       if (response.ok) {
-        a
-        await cookieStore.set("token", data.user.accessToken, { path: "/" });
-        //route to chat window
+        await cookieStore.set("token", token, { path: "/" });
+        // route to chat window
         setLoggedIn(true);
         window.location.href = "/";
       } else {
