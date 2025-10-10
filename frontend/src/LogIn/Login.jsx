@@ -3,37 +3,39 @@ import { auth, googleProvider, } from "../firebase.js";
 import { signInWithPopup } from "firebase/auth";
 import { MyContext } from "../MyContext.jsx";
 import "./Login.css";
+import Cookies from "js-cookie";
+
 
 
 
 const Login = () => {
-  const { user, setLoggedIn } = useContext(MyContext);
+  const { loggedIn, setLoggedIn } = useContext(MyContext);
+
   const handleGoogleLogin = async () => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
-      const token = await result.user.getIdToken(); // ✅ get Firebase ID token
-
-
-      console.log("✅ User Info:", result);
+      const user = await result.user;
+      const token = await user.getIdToken();
       const userData = {
+        uid: user.uid,
+        name: user.displayName,
+        email: user.email,
+        photo: user.photoURL,
+        provider: "google",
+      };
+
+
+      const response = await fetch("http://localhost:8080/api/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          name: result.user.displayName,
-          email: result.user.email,
-          accessToken: token,  // use token here
-          avatar: result.user.photoURL,
-          provider: "google",
-          userId: result.user.uid,
-        })
-      };
-      const response = await fetch("http://localhost:8080/api/signup", userData);
-
+        body: JSON.stringify(userData),
+      });
       if (response.ok) {
-        await cookieStore.set("token", token, { path: "/" });
         // route to chat window
+        Cookies.set("authToken", token, { expires: 1, secure: true, sameSite: "Strict" });
         setLoggedIn(true);
         window.location.href = "/";
       } else {
@@ -49,7 +51,7 @@ const Login = () => {
     <div className="login-container">
       <div className="login-card">
         <h2>Login Page</h2>
-        {!user && (
+        
           <button className="gsi-material-button" onClick={handleGoogleLogin}>
             <div className="gsi-material-button-state"></div>
             <div className="gsi-material-button-content-wrapper">
@@ -73,7 +75,7 @@ const Login = () => {
               <span style={{ display: "none" }}>Continue with Google</span>
             </div>
           </button>
-        )}
+        
       </div>
     </div>
   );

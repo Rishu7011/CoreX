@@ -16,7 +16,7 @@ function ChatWindow() {
     const handleSignOut = () => {
         signOut(auth).then(() => {
             setLoggedIn(false);
-            cookieStore.delete('token');
+            cookieStore.remove('authToken');
         }).catch((error) => {
             console.error("Sign Out Error:", error);
         });
@@ -26,8 +26,8 @@ function ChatWindow() {
         return match ? match[2] : null;
     };
     useEffect(() => {
-        const token = getCookie("token");
-        if (token) {
+        const authToken = getCookie("authToken");
+        if (authToken) {
             return;
         } else {
             const handleUnload = async (threadId) => {
@@ -43,8 +43,8 @@ function ChatWindow() {
         }
     }, []);
     const getUserData = async () => {
-        const token = getCookie("token");
-        if (!token) {
+        const authToken = getCookie("authToken");
+        if (!authToken) {
             setLoggedIn(false);
             return;
         }
@@ -53,7 +53,7 @@ function ChatWindow() {
             const response = await fetch("http://localhost:8080/api/userData", {
                 method: "GET",
                 headers: {
-                    "Authorization": `Bearer ${token}`,
+                    "Authorization": `Bearer ${authToken}`,
                 },
             });
             const data = await response.json();
@@ -82,7 +82,7 @@ function ChatWindow() {
             body: JSON.stringify({
                 message: prompt,
                 threadId: currentThreadId,
-                token: getCookie("token") || "",
+                token: getCookie("authToken") || "",
             })
 
         }
@@ -116,8 +116,8 @@ function ChatWindow() {
     }, [reply])
 
     useEffect(() => {
-        const token = getCookie("token");
-        if (!token) {
+        const authToken = getCookie("authToken");
+        if (!authToken) {
             setLoggedIn(false);
             return;
         }
