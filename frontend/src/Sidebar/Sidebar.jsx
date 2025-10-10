@@ -3,7 +3,7 @@ import { useContext, useEffect } from "react";
 import {MyContext} from "../MyContext.jsx";
 import { v4 as uuidv4 } from 'uuid';
 function Sidebar() {
-   const {allThreads,setAllThreads,currThreadId,setNewChat,setPrompt,setReply,setCurrentThreadId,setPrevChats} = useContext(MyContext);
+   const {allThreads,setAllThreads,currThreadId,setNewChat,setPrompt,setReply,setCurrentThreadId,setPrevChats,loggedIn ,setLoggedIn} = useContext(MyContext);
    const createNewChat = () => {
       setNewChat(true);
       setPrompt("");
@@ -11,6 +11,18 @@ function Sidebar() {
       setCurrentThreadId(uuidv4());
       setPrevChats([]);
    }
+   const getCookie = (name) => {
+        const match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
+        return match ? match[2] : null;
+    };
+    useEffect(() => {
+        const authToken = getCookie("authToken");
+        if (!authToken) {
+            setLoggedIn(false);
+            return;
+        }
+        setLoggedIn(true);
+    }, [setLoggedIn])
    const changeThread = async(newThreadId) => {
       setCurrentThreadId(newThreadId);
 
@@ -62,7 +74,8 @@ function Sidebar() {
    }, [currThreadId])
     return ( 
         <>
-        <section className="sidebar">
+        {loggedIn &&
+         <section className="sidebar">
            {/* new chat Button */}
            <button onClick={createNewChat}>
             <img className="logo"  src="https://imgs.search.brave.com/OC4-UKgf1zeU4NZ8XcZs8i0AEfcUMfY8dTp4jnF5dMk/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jaGF0/Z3B0YWlodWIuY29t/L3dwLWNvbnRlbnQv/dXBsb2Fkcy8yMDIz/LzA2L0NoYXRHcHQt/TG9nby13aXRoLUJs/YWNrLUJhY2tncm91/bmQucG5n"></img>
@@ -95,6 +108,7 @@ function Sidebar() {
             <p>Contact:<a href="https://www.linkedin.com/in/rishabh-negi-877360286/">linkedin</a></p>
            </div>
         </section>
+        }
         </>
      );
 }

@@ -6,7 +6,14 @@ const router = express.Router();
 
 // ✅ Middleware to verify Firebase token
 const verifyFirebaseToken = async (req, res, next) => {
-  const token = req.headers.authorization?.split(" ")[1];
+  // Try Authorization header first
+  let token = req.headers.authorization?.split(" ")[1];
+
+  // If not present, try cookie
+  if (!token && req.cookies?.authToken) {
+    token = req.cookies.authToken;
+  }
+
   if (!token) return res.status(401).json({ message: "No token provided" });
 
   try {
@@ -19,14 +26,14 @@ const verifyFirebaseToken = async (req, res, next) => {
   }
 };
 
+
 // ✅ Route: Save or update user
 router.post("/signup", verifyFirebaseToken, async (req, res) => {
   try {
     const { uid, name, email, photo , provider} = req.body;
 
     // Check if user exists
-    let user = await User.findOne({ uid });
-
+    let user = await User.findOne({ userId: uid });
     if (user) {
       // update if user already exists
       user.name = name;

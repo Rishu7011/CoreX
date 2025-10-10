@@ -16,7 +16,7 @@ function ChatWindow() {
     const handleSignOut = () => {
         signOut(auth).then(() => {
             setLoggedIn(false);
-            cookieStore.remove('authToken');
+            cookieStore.delete('authToken');
         }).catch((error) => {
             console.error("Sign Out Error:", error);
         });
@@ -71,7 +71,7 @@ function ChatWindow() {
 
     useEffect(() => {
         getUserData();
-    },[])
+    }, [])
 
     const getReply = async () => {
         const options = {
@@ -128,7 +128,9 @@ function ChatWindow() {
         <>
             <div className="chatWindow">
                 <div className="navbar">
-                    <span >CoreX  <i className="fa-solid fa-chevron-down"></i></span>
+                    <span>
+                        <img className="logo" src="https://imgs.search.brave.com/OC4-UKgf1zeU4NZ8XcZs8i0AEfcUMfY8dTp4jnF5dMk/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jaGF0/Z3B0YWlodWIuY29t/L3dwLWNvbnRlbnQv/dXBsb2Fkcy8yMDIz/LzA2L0NoYXRHcHQt/TG9nby13aXRoLUJs/YWNrLUJhY2tncm91/bmQucG5n"></img>
+                        <span >CoreX  <i className="fa-solid fa-chevron-down"></i></span></span>
                     <div className="userIconDiv"><span >{loggedIn && user ? (
                         <span>
                             <img

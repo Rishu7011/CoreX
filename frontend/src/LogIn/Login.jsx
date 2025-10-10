@@ -39,7 +39,7 @@ const Login = () => {
         setLoggedIn(true);
         window.location.href = "/";
       } else {
-        console.error("❌ Signup Error:", data.message);
+        console.error("❌ Signup Error:");
       }
     } catch (error) {
       console.error("❌ Google Login Error:", error);

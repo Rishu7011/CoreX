@@ -4,6 +4,8 @@ import cors from "cors";
 import mongoose from "mongoose";
 import chatRoutes from "./routes/chat.js"
 import AuthRoutes from "./routes/Auth.js";
+import cookieParser from "cookie-parser";
+
 
 const app = express();
 const PORT = 8080;
@@ -13,6 +15,8 @@ app.use(express.json());
 
 app.use("/api",chatRoutes)
 app.use("/api",AuthRoutes)
+app.use(cookieParser());
+
 
 
 app.listen(PORT, () => {
