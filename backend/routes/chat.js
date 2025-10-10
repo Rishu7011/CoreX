@@ -34,6 +34,36 @@ router.get("/thread", async (req, res) => {
         res.status(500).json({ error: "Failes to fetch threads" })
     }
 })
+router.get("/userData", async (req, res) => {
+  let token = req.headers['authorization'];
+  if (!token) {
+    return res.status(401).json({ error: "Unauthorized: No token provided" });
+  }
+
+  // ✅ Strip 'Bearer ' prefix if present
+  if (token.startsWith("Bearer ")) {
+    token = token.slice(7, token.length).trim();
+  }
+  
+  try {
+    // You can verify it with JWT if you’re using JWTs:
+    // const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    // const user = await User.findById(decoded.id);
+
+    // OR, if you’re storing the token directly in DB:
+    const user = await User.findOne({ accessToken: token });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.json({ user });
+  } catch (err) {
+    console.error("Error fetching user data:", err);
+    res.status(500).json({ error: "Failed to fetch user data" });
+  }
+});
+
 
 //get a particular thread
 router.get("/thread/:threadId", async (req, res) => {

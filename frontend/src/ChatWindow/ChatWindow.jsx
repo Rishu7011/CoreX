@@ -10,8 +10,9 @@ import { signOut } from "firebase/auth";
 
 
 function ChatWindow() {
-    const { prompt, setPrompt, reply, setReply, currentThreadId, setCurrentThreadId, prevChats, setPrevChats, setNewChat, loggedIn, setLoggedIn, user } = useContext(MyContext);
+    const { prompt, setPrompt, reply, setReply, currentThreadId, setCurrentThreadId, prevChats, setPrevChats, setNewChat, loggedIn, setLoggedIn, } = useContext(MyContext);
     const [loading, setLoading] = useState(false);
+    const [user, setUser] = useState(null);
     const handleSignOut = () => {
         signOut(auth).then(() => {
             setLoggedIn(false);
@@ -41,7 +42,37 @@ function ChatWindow() {
             };
         }
     }, []);
-    
+    const getUserData = async () => {
+        const token = getCookie("token");
+        if (!token) {
+            setLoggedIn(false);
+            return;
+        }
+        setLoggedIn(true);
+        try {
+            const response = await fetch("http://localhost:8080/api/userData", {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                },
+            });
+            const data = await response.json();
+            if (response.ok && data.user) {
+                setUser(data.user); // ✅ store only the user object
+            } else {
+                console.error("Error fetching user data:", data);
+                setUser(null);
+            }
+        } catch (error) {
+            console.error("Error fetching user data:", error);
+            setUser(null);
+        }
+    };
+
+    useEffect(() => {
+        getUserData();
+    },[])
+
     const getReply = async () => {
         const options = {
             method: "POST",
@@ -51,7 +82,7 @@ function ChatWindow() {
             body: JSON.stringify({
                 message: prompt,
                 threadId: currentThreadId,
-                token: getCookie("token")||"",
+                token: getCookie("token") || "",
             })
 
         }
@@ -68,7 +99,7 @@ function ChatWindow() {
             setLoading(false);
         }
     }
-    
+
     //Append the new message and reply to the chat history
     useEffect(() => {
         if (prompt && reply) {
@@ -84,15 +115,24 @@ function ChatWindow() {
         setPrompt("");
     }, [reply])
 
+    useEffect(() => {
+        const token = getCookie("token");
+        if (!token) {
+            setLoggedIn(false);
+            return;
+        }
+        setLoggedIn(true);
+    }, [setLoggedIn])
+
     return (
         <>
             <div className="chatWindow">
                 <div className="navbar">
                     <span >CoreX  <i className="fa-solid fa-chevron-down"></i></span>
-                    <div className="userIconDiv"><span >{loggedIn ? (
+                    <div className="userIconDiv"><span >{loggedIn && user ? (
                         <span>
                             <img
-                                src={user?.avatar || user?.photoURL}
+                                src={user.avatar || "/default-avatar.png"} // ✅ fallback avatar
                                 alt="user avatar"
                                 className="userAvatar"
                                 style={{ width: "35px", height: "35px", borderRadius: "50%" }}
@@ -101,16 +141,13 @@ function ChatWindow() {
                         </span>
                     ) : (
                         <p>
-                            <Link
-                                style={{ textDecoration: "none", color: "#0D0D0D" }}
-                                to="/login"
-                            >
+                            <Link style={{ textDecoration: "none", color: "#0D0D0D" }} to="/login">
                                 Login
                             </Link>
                         </p>
                     )}
                     </span></div>
-                    
+
                 </div>
                 <Chat></Chat>
                 {loading && <div className="loaderDiv"><ScaleLoader color="#fff"></ScaleLoader></div>}
