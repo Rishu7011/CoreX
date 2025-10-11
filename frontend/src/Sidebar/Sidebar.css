@@ -6,30 +6,78 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 1000;
+    transition: transform 0.3s ease-in-out;
+    transform: translateX(0);
+}
 
+.sidebar.closed {
+    transform: translateX(-100%);
 }
 
 button {
+    background-color: #171717;
+    color: white;
+    border: none;
+    border-radius: 14px;
+    padding: 10px 15px;
+    margin: 10px;
+    cursor: pointer;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+button img {
+    padding: 5px;
+}
+
+button img:hover {
+    cursor: pointer;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.splitclose {
+    padding: 5px;
+}
+
+.splitclose:hover {
+    cursor: pointer;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.NewChat {
+    display: flex;
+    align-items: center;
+    gap: 12px;
     margin: 10px;
-    padding: 10px;
+    margin-top: 20px;
+    padding: 15px;
     border-radius: 14px;
-    background-color: transparent;
-    border: solid rgba(255, 255, 255, 0.5);
+    cursor: pointer;
 }
 
-.logo {
-    height: 25px;
-    width: 25px;
-    background-color: white;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-button span {
+.NewChat i {
     font-size: 20px;
+}
+
+.NewChat:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.chatP {
+    margin: 0px 0px 0px 20px;
+    font-size: 14px;
+    color: #888;
+    font-weight: 600;
 }
 
 .history {
@@ -37,36 +85,28 @@ button span {
     padding: 0;
     height: 90%;
     overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }
 
 .history::-webkit-scrollbar {
     background-color: #888;
-    /* color of the thumb */
     border-radius: 10px;
-    /* rounded corners */
-    
-    /* optional space around thumb */
     background-clip: padding-box;
 }
 
-/* On hover */
 .history::-webkit-scrollbar-thumb:hover {
-  background-color: #555;
-}
-
-/* Scrollbar corner (if both horizontal & vertical scrollbars show) */
-.history::-webkit-scrollbar-corner {
-  background: transparent;
-  border: 0.5px solid transparent;
+    background-color: #555;
 }
 
 .history li {
     list-style-type: none;
     margin: 0px 0px 6px 6px;
-    padding: 6px 10px;
+    padding: 10px 12px;
     cursor: pointer;
-    font-size: 14px;
-    border: solid 0px transparent;
+    font-size: 15px;
+    font-weight: 500;
     position: relative;
     display: flex;
     justify-content: space-between;
@@ -103,4 +143,24 @@ button span {
     font-size: 12px;
     padding: 10px;
     color: #555;
+}
+
+.highlightChat {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+}
+
+.sliderClose {
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #171717;
+    border-radius: 12px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.splitopen {
+    color: white;
 }

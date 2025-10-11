@@ -27,6 +27,10 @@ const verifyFirebaseToken = async (req, res, next) => {
 };
 
 
+
+
+
+
 // ✅ Route: Save or update user
 router.post("/signup", verifyFirebaseToken, async (req, res) => {
   try {
@@ -38,6 +42,7 @@ router.post("/signup", verifyFirebaseToken, async (req, res) => {
       // update if user already exists
       user.name = name;
       user.photo = photo;
+      user.accessToken = req.headers.authorization?.split(" ")[1]; // Update the token
       await user.save();
       return res.status(200).json({
         message: "User already exists, updated info",

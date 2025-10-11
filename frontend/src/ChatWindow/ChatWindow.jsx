@@ -7,12 +7,20 @@ import { Link } from "react-router-dom";
 import Login from "../LogIn/Login.jsx";
 import { auth, googleProvider, } from "../firebase.js";
 import { signOut } from "firebase/auth";
+import { IoIosSettings } from "react-icons/io";
+import { GrUpgrade } from "react-icons/gr";
+import { PiSignOut } from "react-icons/pi";
+
+
+
+
 
 
 function ChatWindow() {
     const { prompt, setPrompt, reply, setReply, currentThreadId, setCurrentThreadId, prevChats, setPrevChats, setNewChat, loggedIn, setLoggedIn, } = useContext(MyContext);
     const [loading, setLoading] = useState(false);
     const [user, setUser] = useState(null);
+    const [isOpen, setIsOpen] = useState(false);
     const handleSignOut = () => {
         signOut(auth).then(() => {
             setLoggedIn(false);
@@ -53,7 +61,7 @@ function ChatWindow() {
             const response = await fetch("http://localhost:8080/api/userData", {
                 method: "GET",
                 headers: {
-                    "Authorization": `Bearer ${authToken}`,
+                    "Authorization": `${authToken}`,
                 },
             });
             const data = await response.json();
@@ -61,6 +69,7 @@ function ChatWindow() {
                 setUser(data.user); // ✅ store only the user object
             } else {
                 console.error("Error fetching user data:", data);
+
                 setUser(null);
             }
         } catch (error) {
@@ -128,19 +137,27 @@ function ChatWindow() {
         <>
             <div className="chatWindow">
                 <div className="navbar">
-                    <span>
-                        <img className="logo" src="https://imgs.search.brave.com/OC4-UKgf1zeU4NZ8XcZs8i0AEfcUMfY8dTp4jnF5dMk/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jaGF0/Z3B0YWlodWIuY29t/L3dwLWNvbnRlbnQv/dXBsb2Fkcy8yMDIz/LzA2L0NoYXRHcHQt/TG9nby13aXRoLUJs/YWNrLUJhY2tncm91/bmQucG5n"></img>
-                        <span >CoreX  <i className="fa-solid fa-chevron-down"></i></span></span>
+                    <span className="Logo-Upgrade">
+                        {!loggedIn && <img width="20%" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAACXBIWXMAAAsTAAALEwEAmpwYAAADtUlEQVR4nO2cP4vUQBiHgzaC+B0OyxUrKysbywhXrIWdIpxioZWVwl5pdR9A0ELEwkqwsBOLaGG9cM2JooVYnGijhX8eCWRwWTbJzGSy8+7M+8BWG3aT55f8JpNNtigURVEUJRBABZyPvR7Zwn80iMgBaBBCAtAghASgQQgJQIMQEoBBgwgJ/lQaRNwADBrEEGjnG268As7F3p6No0PoFLgPHDoGUekR4UCHyLJ5aRCRA9AghARQahAyAig1CBkBlBqEjABKDUJGAKUGISOAUoOQEUCpQVjQIeA1cDtwEA/1EscSFgIOgD1gW4+IEXAQcAg8AS5pEAHBnZ/AC+CaBhEA4AzwCPjlKOAv8Ba4q0EEANgC7gFfcecg4DiRfRAngFvAe48gDgOOE9kHcQS40GxQzHFimnQQTf8f71nmLPAU+O0o4U/A+UR9VH10+O539Q5USKdZ2X3gtOBx4g7wyfJ7fgC7wLFiE1ha8R1h48Rl4KXDZz8HThabxIqN6K2kNYwT203v18ukUzeraNkgq0oaaT4RrG7q9wrp9GzcjsfnbTVd/x13voSqmyYYCulYbKh1JQUcJwbVjZGfSgBelRRonHA+u1mUn1IA3pUUaJywOrtZlp9aAIMqyXM+YX12s0p+TSEd/Nj3rSTLccJpMtUmP+UAglTSwjocBS4Cb1wnU13yawrpdKz7nsVEaB553Tvlb3oA9aToes9p5Eyy/BQCqF83O5Y5JVl+KgE8llQ/OMhPJYAPUuoHR/kpBFBfqWxjIl1+CgGIqB/65X9ONYDo9UO//PoK6tUUA4heP9jLL1MMIGr94CY/yQDaJmC7AuUnGUCU+sFPfjYBzIXKzyaAmVD52QQwESo/iwDmguVnEcAs0gz3isXNuw9yCGAibM+3umu6kE6M+mGYfKfb1YtEApgJkD/1eU6gkM466wc/+ck/oLGW+sFdftriDeuoH9zk5yHeMHb9YC8/L/GGMesHO/k3shRvGKt+6JdfPz/wLFvxhjHqB7sf0OsnY1xI819TQtcPnncvZLPHLxOyfggrP23xhlD1Qzj5eYg3hKgfwsjPS7xhaP0wXH6e4g1D6odh8vMWb/CtH/zlq/hFfOoHP/kqfhWu9YO7fBXfhUv94CZfxdtgWz8O8isV74BN/VjKr1S8B331YyG/UvED6KqfHvmVig9AW/10yK9UfEBW1U+L/ErFj8By/ayQr+LHZLF+luSr+HVg6mdBvopfJ3X9NPJVfAyaP0dN78duRVEURSnC8g8BNaetvZMUZwAAAABJRU5ErkJggg==" alt="dynamics-365"></img>
+                        }
+                        <span >CoreX  <i className="fa-solid fa-chevron-down"></i>
+                        </span>
+                    </span>
                     <div className="userIconDiv"><span >{loggedIn && user ? (
-                        <span>
+                        <span
+                            onClick={() => {
+                                setIsOpen(!isOpen)
+                            }}
+                        >
                             <img
                                 src={user.avatar || "/default-avatar.png"} // ✅ fallback avatar
                                 alt="user avatar"
                                 className="userAvatar"
                                 style={{ width: "35px", height: "35px", borderRadius: "50%" }}
                             />
-                            <div onClick={handleSignOut}>logout</div>
+
                         </span>
+
                     ) : (
                         <p>
                             <Link style={{ textDecoration: "none", color: "#0D0D0D" }} to="/login">
@@ -151,6 +168,12 @@ function ChatWindow() {
                     </span></div>
 
                 </div>
+                {isOpen && (<div className="dropdown-user" >
+                    <Link to="/upgrade" className="dropdownItem"><GrUpgrade className="icons" />Upgrade plan</Link>
+                    <div className="dropdownItem"><IoIosSettings className="icons" />Settings</div>
+                    <div className="dropdownItem" onClick={handleSignOut}><PiSignOut className="icons" />Logout</div>
+                </div>)
+                }
                 <Chat></Chat>
                 {loading && <div className="loaderDiv"><ScaleLoader color="#fff"></ScaleLoader></div>}
                 <div className="chatInput">

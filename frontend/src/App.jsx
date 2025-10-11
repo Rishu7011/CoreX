@@ -6,6 +6,7 @@ import { MyContext } from "../src/MyContext.jsx"
 import { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { Routes, Route, Navigate } from 'react-router-dom'
+import Upgrade from './upgrade/Upgrade.jsx'
 
 function App() {
   const [prompt, setPrompt] = useState("");
@@ -40,6 +41,7 @@ function App() {
           </div>}
 
         />
+        <Route path="/upgrade" element={<Upgrade />} /> 
       </Routes>
     </MyContext.Provider>
   )

@@ -6,8 +6,9 @@ import rehypeHighlight from "rehype-highlight";
 import 'highlight.js/styles/atom-one-dark.css';
 
 function Chat() {
-    const { newChat, prevChats, reply } = useContext(MyContext);
+    const { newChat, prevChats, reply , loggedIn , setLoggedIn } = useContext(MyContext);
     const [latestReply, setLatestReply] = useState(null);
+    const [user, setUser] = useState(null);
     useEffect(() => {
         //latestReply is the last message in prevChats with role "assistant"
         if (reply === null) {
@@ -24,9 +25,53 @@ function Chat() {
         }, 40);
         return () => clearInterval(interval);
     }, [prevChats, reply])
+    const getCookie = (name) => {
+        const match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
+        return match ? match[2] : null;
+    };
+    useEffect(() => {
+        const authToken = getCookie("authToken");
+        if (!authToken) {
+            setLoggedIn(false);
+            return;
+        }
+        setLoggedIn(true);
+    }, [setLoggedIn])
+    const getUserData = async () => {
+        const authToken = getCookie("authToken");
+        if (!authToken) {
+            setLoggedIn(false);
+            return;
+        }
+        setLoggedIn(true);
+        try {
+            const response = await fetch("http://localhost:8080/api/userData", {
+                method: "GET",
+                headers: {
+                    "Authorization": `${authToken}`,
+                },
+            });
+            const data = await response.json();
+            if (response.ok && data.user) {
+                setUser(data.user); // ✅ store only the user object
+            } else {
+                console.error("Error fetching user data:", data);
+
+                setUser(null);
+            }
+        } catch (error) {
+            console.error("Error fetching user data:", error);
+            setUser(null);
+        }
+    };
+
+    useEffect(() => {
+        getUserData();
+    }, [])
+    
     return (
         <>
-            {newChat && <h1>Start a New Chat</h1>}
+            {newChat && <h1>{loggedIn ? (<p>Good to see you, {user?.name}.</p>) :(<p>Start a New Chat</p>)}</h1>}
             <div className="chats">
                 {
                     prevChats?.slice(0, -1).map((chat, idx) => (

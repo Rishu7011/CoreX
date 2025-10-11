@@ -24,8 +24,10 @@ router.post("/test", async (req, res) => {
 //Get all threads
 router.get("/thread", async (req, res) => {
     try {
-        const threads = await Thread.find({}).sort({ updatedAt: -1 });
+        let userId = req.headers['authorization'];
+        console.log("userId from headers:", userId)
         //descending order of updated... most recent data on top
+        const threads = await Thread.find({ userId }).sort({ updatedAt: -1 });
         res.json(threads);
 
 
@@ -38,11 +40,6 @@ router.get("/userData", async (req, res) => {
   let token = req.headers['authorization'];
   if (!token) {
     return res.status(401).json({ error: "Unauthorized: No token provided" });
-  }
-
-  // ✅ Strip 'Bearer ' prefix if present
-  if (token.startsWith("Bearer ")) {
-    token = token.slice(7, token.length).trim();
   }
   
   try {

@@ -1,5 +1,6 @@
 .chats {
-    max-width: 700px;
+    margin-top: 2rem;
+    margin-bottom:0.5rem ;
     padding: 8rem;
     overflow-y: scroll;
     /* Enable vertical scrolling */
@@ -11,9 +12,13 @@
     /* Firefox */
     -ms-overflow-style: none;
     /* Internet Explorer 10+ */
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
 }
 .chats::-webkit-scrollbar {
   display: none;                  /* Chrome, Safari, Opera */
+  
 }
 
 .userDiv {
@@ -32,13 +37,16 @@
     background-color: #323232;
     padding: 10px 20px;
     border-radius: 14px;
-    margin-left: 15rem;
+    /* margin-left: 15rem; */
     max-width: 500px;
     width: fit-content;
 }
 
 .hljs {
-    border-radius: 14px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    background: #2d2d2d;
+
 }
 
 pre {

@@ -19,13 +19,13 @@ app.use(cookieParser());
 
 
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
     console.log(`Server is running on port ${PORT}`);
-    connectDB()
+    await connectDB()
 })
 const connectDB = async()=>{
     try{
-        await mongoose.connect(process.env.MONGOBD_URI);
+        await mongoose.connect(process.env.MONGODB_URI);
         console.log("connected with Database")
 
     }catch(err){
