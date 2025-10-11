@@ -22,7 +22,7 @@ function Sidebar() {
         }
         setLoggedIn(true);
         try {
-            const response = await fetch("http://localhost:8080/api/userData", {
+            const response = await fetch("https://corex-1.onrender.com/userData", {
                 method: "GET",
                 headers: {
                     "Authorization": `${authToken}`,
@@ -46,7 +46,7 @@ function Sidebar() {
     };
     const getAllThreads = async (_id) => {
       try {
-         const response = await fetch("http://localhost:8080/api/thread",{
+         const response = await fetch("https://corex-1.onrender.com/thread",{
             method: "GET",
             headers: {
                "Authorization": `${_id}`
@@ -95,7 +95,7 @@ function Sidebar() {
    const changeThread = async (newThreadId) => {
       setCurrentThreadId(newThreadId);
       try {
-         const response = await fetch(`http://localhost:8080/api/thread/${newThreadId}`);
+         const response = await fetch(`https://corex-1.onrender.com/thread/${newThreadId}`);
          const data = await response.json();
          setPrevChats(data);
          setNewChat(false);
@@ -107,7 +107,7 @@ function Sidebar() {
 
    const deleteThread = async (threadId) => {
       try {
-         const response = await fetch(`http://localhost:8080/api/thread/${threadId}`, {
+         const response = await fetch(`https://corex-1.onrender.com/thread/${threadId}`, {
             method: "DELETE"
          });
          if (response.ok) {

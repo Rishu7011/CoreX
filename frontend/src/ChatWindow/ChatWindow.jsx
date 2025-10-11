@@ -39,7 +39,7 @@ function ChatWindow() {
             return;
         } else {
             const handleUnload = async (threadId) => {
-                await fetch(`http://localhost:5000/api/cleanup/${threadId}`, {
+                await fetch(`https://corex-1.onrender.com/cleanup/${threadId}`, {
                     method: "DELETE"
                 });
             };
@@ -58,7 +58,7 @@ function ChatWindow() {
         }
         setLoggedIn(true);
         try {
-            const response = await fetch("http://localhost:8080/api/userData", {
+            const response = await fetch("https://corex-1.onrender.com/userData", {
                 method: "GET",
                 headers: {
                     "Authorization": `${authToken}`,
@@ -98,7 +98,7 @@ function ChatWindow() {
         try {
             setLoading(true);
             setNewChat(false);
-            const response = await fetch("http://localhost:8080/api/chat", options)
+            const response = await fetch("https://corex-1.onrender.com/chat", options)
             const res = await response.json();
             setReply(res.reply);
             console.log("Received reply:", res.reply);
