@@ -45,7 +45,6 @@ function Sidebar() {
         }
     };
     const getAllThreads = async (_id) => {
-      console.log("Fetching threads for user ID:", _id);
       try {
          const response = await fetch("http://localhost:8080/api/thread",{
             method: "GET",

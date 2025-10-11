@@ -25,7 +25,6 @@ router.post("/test", async (req, res) => {
 router.get("/thread", async (req, res) => {
     try {
         let userId = req.headers['authorization'];
-        console.log("userId from headers:", userId)
         //descending order of updated... most recent data on top
         const threads = await Thread.find({ userId }).sort({ updatedAt: -1 });
         res.json(threads);
@@ -129,7 +128,6 @@ router.post("/chat", async (req, res) => {
             return res.json({ reply: assistantReply });
         }
         let thread = await Thread.findOne({ threadId });
-        console.log("token:", token);
         let userId = await User.findOne({ accessToken: token })
         
 

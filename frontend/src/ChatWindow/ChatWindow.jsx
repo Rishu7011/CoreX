@@ -195,6 +195,7 @@ function ChatWindow() {
                     <p className="info">
                         CoreX can make mistakes. check important info. See cookie Preferences.
                     </p>
+                    <p>© 2025 | Created by Rishabh Negi | Contact: <a href="https://www.linkedin.com/in/rishabh-negi-877360286/" target="_blank" rel>Linkedin</a></p>
                 </div>
             </div>
         </>
