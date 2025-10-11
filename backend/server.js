@@ -16,7 +16,8 @@ app.use(express.json());
 app.use("/api",chatRoutes)
 app.use("/api",AuthRoutes)
 app.use(cookieParser());
-app.get("/", (req, res) => {
+app.get("/", async (req, res) => {
+    await connectDB()
     res.json({ message: "Server is running" });
 });
 
@@ -36,7 +37,9 @@ const connectDB = async()=>{
         console.log(`Failed to connect with DB ${err}`);
     }
 }
-
+app.get("/", (req, res) => {
+    res.json({ message: "Server is running" });
+});
 
 
 
