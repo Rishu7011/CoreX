@@ -16,6 +16,10 @@ app.use(express.json());
 app.use("/api",chatRoutes)
 app.use("/api",AuthRoutes)
 app.use(cookieParser());
+app.get("/", (req, res) => {
+    res.json({ message: "Server is running" });
+});
+
 
 
 
@@ -33,31 +37,6 @@ const connectDB = async()=>{
     }
 }
 
-// app.post("/test", async (req, res) => {
-//     const options = {
-//         method: 'POST',
-//         headers: {
-//             "content-type": "application/json",
-//             "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
-//         },
-//         body: JSON.stringify({
-//             model: 'openai/gpt-4o',
-//             messages: [
-//                 {
-//                     role: 'user',
-//                     content: req.body.message,
-//                 },
-//             ],
-//         })
-//     }
-//     try {
-//         const response = await fetch("https://openrouter.ai/api/v1/chat/completions", options);
-//         const data = await response.json();
-//         // console.log(data.choices[0].message.content);
-//         res.send(data.choices[0].message.content);
-//     } catch (err) {
-//         console.error(err);
-//     }
-// });
+
 
 
