@@ -21,10 +21,18 @@ function ChatWindow() {
     const [loading, setLoading] = useState(false);
     const [user, setUser] = useState(null);
     const [isOpen, setIsOpen] = useState(false);
+    const createNewChat = () => {
+      setNewChat(true);
+      setPrompt("");
+      setReply(null);
+      setCurrentThreadId(uuidv4());
+      setPrevChats([]);
+   };
     const handleSignOut = () => {
         signOut(auth).then(() => {
             setLoggedIn(false);
             cookieStore.delete('authToken');
+            createNewChat();
         }).catch((error) => {
             console.error("Sign Out Error:", error);
         });

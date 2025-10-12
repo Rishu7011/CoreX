@@ -19,5 +19,7 @@ export const db = getFirestore(app);
 
 // ✅ Google provider
 export const googleProvider = new GoogleAuthProvider();
+// ✅ GitHub provider
+export const gitHubProvider = new GithubAuthProvider();
 
 export default app;
