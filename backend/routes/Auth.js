@@ -71,4 +71,29 @@ router.post("/signup", verifyFirebaseToken, async (req, res) => {
   }
 });
 
+// ✅ Route: Check authentication
+router.get("/checkauth", verifyFirebaseToken, async (req, res) => {
+  try {
+    const token = req.token;
+    if (!token) {
+      return res.status(401).json({ message: "No token provided" });
+    }
+
+    const user = await User.findOne({ accessToken: token });
+    if (!user) {
+      return res.status(401).json({ message: "Invalid or expired token" });
+    }
+
+    // Token is valid
+    res.status(200).json({ message: "User is authenticated", user });
+  } catch (error) {
+    console.error("CheckAuth Error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
+
+
 export default router;
+

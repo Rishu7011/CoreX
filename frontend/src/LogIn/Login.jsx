@@ -79,6 +79,39 @@ const Login = () => {
       console.error("❌ GitHub Login Error:", error);
     }
   };
+  useEffect(() => {
+  const checkAuth = async () => {
+    const authToken = Cookies.get("authToken");
+    if (!authToken) return;
+
+    try {
+      const response = await fetch("https://corex-9gzg.onrender.com/api/checkauth", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
+
+      if (response.ok) {
+        setLoggedIn(true);
+        window.location.href = "/";
+      } else {
+        // ❌ Token invalid or not provided, remove cookie
+        Cookies.remove("authToken");
+        setLoggedIn(false);
+        console.warn("Auth token invalid or expired. Removed cookie.");
+      }
+    } catch (err) {
+      console.error("Auth check error:", err);
+      // Optional: Remove token on fetch failure
+      Cookies.remove("authToken");
+      setLoggedIn(false);
+    }
+  };
+
+  checkAuth();
+}, [setLoggedIn]);
+
 
   return (
     <div className="login-container">
