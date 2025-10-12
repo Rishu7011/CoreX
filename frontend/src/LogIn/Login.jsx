@@ -7,7 +7,6 @@ import Cookies from "js-cookie";
 
 
 
-
 const Login = () => {
   const { loggedIn, setLoggedIn } = useContext(MyContext);
 
@@ -79,40 +78,6 @@ const Login = () => {
       console.error("❌ GitHub Login Error:", error);
     }
   };
- useEffect(() => {
-  const checkAuth = async () => {
-    const authToken = Cookies.get("authToken");
-    if (!authToken) return;
-
-    try {
-      const response = await fetch("https://corex-9gzg.onrender.com/api/checkauth", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${authToken}`,
-        },
-      });
-
-      if (response.ok) {
-        // Token valid → logged in
-        setLoggedIn(true);
-        window.location.href = "/";
-      } else if (response.status === 401) {
-        // ❌ Token invalid/expired → remove cookie
-        Cookies.remove("authToken");
-        setLoggedIn(false);
-        console.warn("Auth token invalid or expired. Cookie removed.");
-      }
-    } catch (err) {
-      console.error("Auth check error:", err);
-      // Optional: remove token on fetch failure
-      Cookies.remove("authToken");
-      setLoggedIn(false);
-    }
-  };
-
-  checkAuth();
-}, [setLoggedIn]);
-
 
   return (
     <div className="login-container">
