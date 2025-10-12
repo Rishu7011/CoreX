@@ -10,6 +10,7 @@ import { signOut } from "firebase/auth";
 import { IoIosSettings } from "react-icons/io";
 import { GrUpgrade } from "react-icons/gr";
 import { PiSignOut } from "react-icons/pi";
+import { v4 as uuidv4 } from 'uuid';
 
 
 

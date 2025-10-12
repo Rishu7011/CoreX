@@ -35,7 +35,7 @@ const verifyFirebaseToken = async (req, res, next) => {
 router.post("/signup", verifyFirebaseToken, async (req, res) => {
   try {
     const { uid, name, email, photo , provider} = req.body;
-
+    
     // Check if user exists
     let user = await User.findOne({ userId: uid });
     if (user) {
