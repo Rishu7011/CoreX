@@ -94,6 +94,7 @@ const Login = () => {
     try {
       const result = await signInWithPopup(auth, gitHubProvider);
       const user = result.user;
+      console.log(user);
       const token = await user.getIdToken();
       const userData = {
         uid: user.uid,
