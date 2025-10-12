@@ -168,7 +168,7 @@ function ChatWindow() {
                     </span></div>
 
                 </div>
-                {isOpen && (<div className="dropdown-user" >
+                {loggedIn && isOpen && (<div className="dropdown-user" >
                     <Link to="/upgrade" className="dropdownItem"><GrUpgrade className="icons" />Upgrade plan</Link>
                     <div className="dropdownItem"><IoIosSettings className="icons" />Settings</div>
                     <div className="dropdownItem" onClick={handleSignOut}><PiSignOut className="icons" />Logout</div>
