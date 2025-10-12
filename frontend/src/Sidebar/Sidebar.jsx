@@ -95,7 +95,7 @@ function Sidebar() {
    const changeThread = async (newThreadId) => {
       setCurrentThreadId(newThreadId);
       try {
-         const response = await fetch(`https://corex-9gzg.onrender.com/apithread/${newThreadId}`);
+         const response = await fetch(`https://corex-9gzg.onrender.com/api/thread/${newThreadId}`);
          const data = await response.json();
          setPrevChats(data);
          setNewChat(false);
