@@ -25,7 +25,7 @@ const Login = () => {
       };
 
 
-      const response = await fetch("https://corex-1.onrender.com/signup", {
+      const response = await fetch("https://corex-9gzg.onrender.com/api/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

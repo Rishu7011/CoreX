@@ -45,7 +45,7 @@ function Chat() {
         }
         setLoggedIn(true);
         try {
-            const response = await fetch("https://corex-1.onrender.com/userData", {
+            const response = await fetch("https://corex-9gzg.onrender.com/api/userData", {
                 method: "GET",
                 headers: {
                     "Authorization": `${authToken}`,

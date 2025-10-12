@@ -39,7 +39,7 @@ function ChatWindow() {
             return;
         } else {
             const handleUnload = async (threadId) => {
-                await fetch(`https://corex-1.onrender.com/cleanup/${threadId}`, {
+                await fetch(`https://corex-9gzg.onrender.com/api/cleanup/${threadId}`, {
                     method: "DELETE"
                 });
             };
@@ -58,7 +58,7 @@ function ChatWindow() {
         }
         setLoggedIn(true);
         try {
-            const response = await fetch("https://corex-1.onrender.com/userData", {
+            const response = await fetch("https://corex-9gzg.onrender.com/api/userData", {
                 method: "GET",
                 headers: {
                     "Authorization": `${authToken}`,
@@ -98,7 +98,7 @@ function ChatWindow() {
         try {
             setLoading(true);
             setNewChat(false);
-            const response = await fetch("https://corex-1.onrender.com/chat", options)
+            const response = await fetch("https://corex-9gzg.onrender.com/api/chat", options)
             const res = await response.json();
             setReply(res.reply);
             console.log("Received reply:", res.reply);
@@ -195,7 +195,7 @@ function ChatWindow() {
                     <p className="info">
                         CoreX can make mistakes. check important info. See cookie Preferences.
                     </p>
-                    <p>© 2025 | Created by Rishabh Negi | Contact: <a href="https://www.linkedin.com/in/rishabh-negi-877360286/" target="_blank" rel>Linkedin</a></p>
+                    <p>© 2025 | Created by Rishabh Negi | Contact: <a href="https://www.linkedin.com/in/rishabh-negi-877360286/" target="_blank" >Linkedin</a></p>
                 </div>
             </div>
         </>
