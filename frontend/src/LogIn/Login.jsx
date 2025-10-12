@@ -79,7 +79,7 @@ const Login = () => {
       console.error("❌ GitHub Login Error:", error);
     }
   };
-  useEffect(() => {
+ useEffect(() => {
   const checkAuth = async () => {
     const authToken = Cookies.get("authToken");
     if (!authToken) return;
@@ -93,17 +93,18 @@ const Login = () => {
       });
 
       if (response.ok) {
+        // Token valid → logged in
         setLoggedIn(true);
         window.location.href = "/";
-      } else {
-        // ❌ Token invalid or not provided, remove cookie
+      } else if (response.status === 401) {
+        // ❌ Token invalid/expired → remove cookie
         Cookies.remove("authToken");
         setLoggedIn(false);
-        console.warn("Auth token invalid or expired. Removed cookie.");
+        console.warn("Auth token invalid or expired. Cookie removed.");
       }
     } catch (err) {
       console.error("Auth check error:", err);
-      // Optional: Remove token on fetch failure
+      // Optional: remove token on fetch failure
       Cookies.remove("authToken");
       setLoggedIn(false);
     }
