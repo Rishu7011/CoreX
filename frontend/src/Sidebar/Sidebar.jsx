@@ -121,10 +121,6 @@ function Sidebar() {
       }
    };
 
-   // useEffect(() => {
-      
-   // }, [currThreadId]);
-
    return (
       <>
          {loggedIn && (
@@ -165,6 +161,7 @@ function Sidebar() {
                         </li>
                      ))
                   }
+                  {allThreads.length === 0 && (<p className="Nochats">No chats available</p>)}
                </ul>
 
                {/* Footer */}
@@ -183,7 +180,7 @@ function Sidebar() {
                   className="splitopen"
                   style={{ fontSize: "40px" }}
                />
-               <div className="NewChat"><i className="fa-solid fa-pen-to-square"></i></div>
+               <div onClick={createNewChat} className="NewChat"><i className="fa-solid fa-pen-to-square"></i></div>
             </div>
          )}
       </>

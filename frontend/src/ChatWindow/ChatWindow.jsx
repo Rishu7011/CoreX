@@ -18,17 +18,17 @@ import { v4 as uuidv4 } from 'uuid';
 
 
 function ChatWindow() {
-    const { prompt, setPrompt, reply, setReply, currentThreadId, setCurrentThreadId, prevChats, setPrevChats, setNewChat, loggedIn, setLoggedIn, } = useContext(MyContext);
+    const { prompt, setPrompt, reply, setReply, currentThreadId, setCurrentThreadId, prevChats, setPrevChats, setNewChat, loggedIn, setLoggedIn, setAllThreads } = useContext(MyContext);
     const [loading, setLoading] = useState(false);
     const [user, setUser] = useState(null);
     const [isOpen, setIsOpen] = useState(false);
     const createNewChat = () => {
-      setNewChat(true);
-      setPrompt("");
-      setReply(null);
-      setCurrentThreadId(uuidv4());
-      setPrevChats([]);
-   };
+        setNewChat(true);
+        setPrompt("");
+        setReply(null);
+        setCurrentThreadId(uuidv4());
+        setPrevChats([]);
+    };
     const handleSignOut = () => {
         signOut(auth).then(() => {
             setLoggedIn(false);
@@ -152,7 +152,7 @@ function ChatWindow() {
                         <span >CoreX  <i className="fa-solid fa-chevron-down"></i>
                         </span>
                     </span>
-                    <div className="userIconDiv"><span >{loggedIn && user ? (
+                    <div className="userIconDiv"><span >{loggedIn && user && (
                         <span
                             onClick={() => {
                                 setIsOpen(!isOpen)
@@ -167,14 +167,13 @@ function ChatWindow() {
 
                         </span>
 
-                    ) : (
-                        <p>
-                            <Link style={{ textDecoration: "none", color: "#0D0D0D" }} to="/login">
-                                Login
-                            </Link>
-                        </p>
-                    )}
+                    )  }
                     </span></div>
+                    {!loggedIn && (
+                        <Link className="loginButton" to="/login">
+                            <p >Login</p>
+                        </Link>
+                    )}
 
                 </div>
                 {loggedIn && isOpen && (<div className="dropdown-user" >
