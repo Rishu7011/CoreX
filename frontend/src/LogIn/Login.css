@@ -9,13 +9,18 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+
 /* Login Card */
 .login-card {
+  width: 50%;
   background: #ffffff;
-  padding: 2.5rem 2rem;
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
   border-radius: 16px;
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
-  width: 320px;
+  
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -28,10 +33,17 @@
 }
 
 .login-card h2 {
-  margin-bottom: 2rem;
+  /* margin-bottom: 2rem; */
+  margin: 2px;
   color: #333;
   font-weight: 600;
   text-align: center;
+}
+.Title{
+  font-size: 3rem;
+  color: #171717;
+  font-weight: 700;
+  margin-bottom: 1rem;
 }
 
 .gsi-material-button {

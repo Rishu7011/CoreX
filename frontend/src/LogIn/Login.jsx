@@ -82,7 +82,8 @@ const Login = () => {
   return (
     <div className="login-container">
       <div className="login-card">
-        <h2>Login Page</h2>
+        <h1 className="Title">Welcome to CoreX</h1>
+        <h2>Sign in with</h2>
         
           <button className="gsi-material-button" onClick={handleGoogleLogin}>
             <div className="gsi-material-button-state"></div>
