@@ -63,8 +63,6 @@ frontend/
 │ └── upgrade/
 └── vite.config.js
 
-yaml
-Copy code
 
 ---
 
@@ -105,4 +103,4 @@ Create New Chat: Begin a new thread for a different conversation.
 👨‍💻 Author
 Rishabh Negi
 
-Linkedin(https://www.linkedin.com/in/rishabh-negi-877360286/)
+[LinkedIn](https://www.linkedin.com/in/rishabh-negi-877360286/)
