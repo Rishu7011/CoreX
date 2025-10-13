@@ -1,0 +1,2 @@
+const ERRORS = { 401:"Not logged in. Please sign in.", 403:"Permission denied.", 429:"Too many requests. Please wait.", 500:"Server error. Try again later." };
+export const getErrorMessage = (s) => ERRORS[s] || "An unexpected error occurred.";
