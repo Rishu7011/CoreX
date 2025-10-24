@@ -1,0 +1,1 @@
+exports.checkSuspiciousIP = (ip) => false;
